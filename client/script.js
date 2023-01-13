@@ -6,32 +6,32 @@ const chatContainer = document.querySelector('#chat_container');
 
 let loadInterval;
 
-function loader (element){
+function loader(element) {
   element.textcontent = '';
 
-  loadInterval = setInterval(() =>{
+  loadInterval = setInterval(() => {
     element.textContent += '.';
 
-    if (element.textContext === '....'){
+    if (element.textContext === '....') {
       element.textContent = '';
     }
   }, 300)
 }
 
-function typeText(element, text ){
-  let index =0;
+function typeText(element, text) {
+  let index = 0;
 
   let interval = setInterval(() => {
-    if (index < text.length){
+    if (index < text.length) {
       element.innerHTML += text.charAt(index);
       index++;
     } else {
       clearInterval(interval);
     }
-  },20)
+  }, 20)
 }
 
-function generateUniqueId(){
+function generateUniqueId() {
   const timestamp = Date.now();
   const randomNumber = Math.random();
   const hexadecimalString = randomNumber.toString(16);
@@ -41,7 +41,7 @@ function generateUniqueId(){
 
 function chatStripe(isAi, value, uniqueId) {
   return (
-      `
+    `
       <div class="wrapper ${isAi && 'ai'}">
           <div class="chat">
               <div class="profile">
@@ -79,27 +79,27 @@ const handleSubmit = async (e) => {
 
   // fetch data from server -> bot's response
 
-  const response = await fetch('http://localhost:5000',{
+  const response = await fetch('http://localhost:5000', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      prompt: data.get ('prompt')
+      prompt: data.get('prompt')
     })
   })
 
   clearInterval(loadInterval);
   messageDiv.innerHTML = '';
 
-  if(response.ok){
+  if (response.ok) {
     const data = await response.json();
     const parsedData = data.bot.trim();
 
-    typeText(messageDive, parsedData);
-  }else{
+    typeText(messageDiv, parsedData);
+  } else {
     const err = await response.text();
-    
+
     messageDiv.innerHTML = "Something went wrong";
 
     alert(err);
@@ -107,8 +107,8 @@ const handleSubmit = async (e) => {
 }
 
 form.addEventListener('submit', handleSubmit);
-form.addEventListener('keyup', (e) =>{
-  if (e.keyCode === 13){
+form.addEventListener('keyup', (e) => {
+  if (e.keyCode === 13) {
     handleSubmit(e);
   }
 })
